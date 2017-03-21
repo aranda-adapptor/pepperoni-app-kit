@@ -3,7 +3,7 @@ import store from './src/redux/store';
 import AppViewContainer from './src/modules/AppViewContainer';
 import React, {Component} from 'react';
 import {AppRegistry, BackAndroid} from 'react-native';
-import * as NavigationStateActions from './src/modules/navigation/NavigationState';
+import {NavigationActions} from 'react-navigation';
 
 class PepperoniAppTemplate extends Component {
   componentWillMount() {
@@ -11,27 +11,18 @@ class PepperoniAppTemplate extends Component {
   }
 
   navigateBack() {
-    const navigationState = store.getState().navigationState;
+    const navigatorState = store.getState().get('navigatorState');
 
-    const tabs = navigationState.tabs;
-    const tabKey = tabs.routes[tabs.index].key;
-    const currentTab = navigationState[tabKey];
+    const currentStackScreen = navigatorState.get('index');
+    const currentTab = navigatorState.getIn(['routes', 0, 'index']);
 
-    // if we are in the beginning of our tab stack
-    if (currentTab.index === 0) {
-
-      // if we are not in the first tab, switch tab to the leftmost one
-      if (tabs.index !== 0) {
-        store.dispatch(NavigationStateActions.switchTab(0));
-        return true;
-      }
-
-      // otherwise let OS handle the back button action
-      return false;
+    if (currentTab !== 0 || currentStackScreen !== 0) {
+      store.dispatch(NavigationActions.back());
+      return true;
     }
 
-    store.dispatch(NavigationStateActions.popRoute());
-    return true;
+    // otherwise let OS handle the back button action
+    return false;
   }
 
   render() {
