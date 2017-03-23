@@ -1,9 +1,11 @@
 import {loop, combineReducers} from 'redux-loop-symbol-ponyfill';
+import {firebaseStateReducer} from 'react-redux-firebase'
 import NavigatorStateReducer from '../modules/navigator/NavigatorState';
 import CounterStateReducer from '../modules/counter/CounterState';
 import SessionStateReducer, {RESET_STATE} from '../modules/session/SessionState';
 
 const reducers = {
+  firebase: firebaseStateReducer,
   // Counter sample app state. This can be removed in a live application
   counter: CounterStateReducer,
 

@@ -1,5 +1,6 @@
 import {applyMiddleware, createStore, compose} from 'redux';
 import * as reduxLoop from 'redux-loop-symbol-ponyfill';
+import ReactNative from 'react-native';
 import middleware from './middleware';
 import reducer from './reducer';
 
@@ -18,11 +19,27 @@ const composeEnhancers = (__DEV__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
 
 const enhancer = composeEnhancers(...enhancers);
 
-// create the store
+// Firebase config
+const firebaseConfig = {
+  apiKey: '',
+  authDomain: '',
+  databaseURL: ''
+};
+
+import { reactReduxFirebase } from 'react-redux-firebase';
 const store = createStore(
   reducer,
-  null,
-  enhancer
+  { firebase: { authError: null } },
+  compose(
+    reactReduxFirebase(
+      firebaseConfig, {
+        userProfile: 'users',
+        enableRedirectHandling: false,
+        enableLogging: true,
+        rn: ReactNative
+      }),
+    enhancer,
+  )
 );
 
 export default store;

@@ -4,6 +4,11 @@ import CounterView from './CounterView';
 import {NavigationActions} from 'react-navigation';
 import * as CounterStateActions from '../counter/CounterState';
 
+import {firebaseConnect, dataToJS} from 'react-redux-firebase';
+const CounterViewWithFirebase = firebaseConnect([
+  '/counter'
+])(CounterView)
+
 export default connect(
   state => ({
     counter: state.counter.value,
@@ -15,4 +20,4 @@ export default connect(
       counterStateActions: bindActionCreators(CounterStateActions, dispatch)
     };
   }
-)(CounterView);
+)(CounterViewWithFirebase);
